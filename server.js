@@ -51,7 +51,7 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.use(express.static(path.join(__dirname, '/frontend/build')));
 app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, '../lala-frontend/public/index.html'))
+    res.sendFile(path.join(__dirname, '../lala-Mui-frontend/public/index.html'))
 );
 
 app.use((err, req, res) => {

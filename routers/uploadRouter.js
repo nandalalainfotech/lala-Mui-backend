@@ -17,16 +17,43 @@ uploadRouter.post('/', isAuth, upload.single('image'), (async(req, res) => {
         originalname: req.file.originalname,
         filename: req.file.filename,
         status: req.body.status,
-        // mimetype : req.body.mimetype,
+        productId : req.body.productData,
         // encoding : req.body.encoding,
     });
     const imageUploaded = await image.save();
     res.send({ message: 'image Uploaded', image: imageUploaded });
 }));
 
+uploadRouter.put('/:id', isAuth, upload.single('image'), (async(req, res) => {
+    const imageId = req.params.id;
+    const image = await Image.findById(imageId);
+    if (image) {
+        image.fieldname = req.file.fieldname;
+        image.originalname = req.file.originalname;
+        image.filename = req.file.filename;
+        image.status = req.body.status;
+        const updateImage = await image.save();
+        res.send({ message: 'image Updated', image: updateImage });
+    } else {
+        res.status(404).send({ message: 'Image Not Found' });
+    }
+}));
+
 uploadRouter.get('/list', expressAsyncHandler(async(req, res) => {
     const images = await Image.find();
     res.send(images);
+}));
+
+uploadRouter.delete('/:id', isAuth, expressAsyncHandler(async(req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    const image = await Image.findById(product.fileId);
+    if (image) {
+        const deleteImage = await image.remove();
+        res.send({ message: 'Image Deleted', image: deleteImage });
+    } else {
+        res.status(404).send({ message: 'Image Not Found' });
+    }
 }));
 
 uploadRouter.get('/show/:id', expressAsyncHandler(async(req, res) => {
@@ -52,4 +79,6 @@ uploadRouter.get('/show/:id', expressAsyncHandler(async(req, res) => {
         return readstream.pipe(res);
     });
 }));
+
+
 export default uploadRouter;
