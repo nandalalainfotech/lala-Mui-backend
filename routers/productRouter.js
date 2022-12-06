@@ -4,8 +4,10 @@ import data from '../data.js';
 import Product from '../Models/productModel.js';
 import { isAdmin, isAuth, isSellerOrAdmin } from '../utils.js';
 import User from '../Models/userModel.js';
+import Image from '../Models/imagesModel.js';
 
 const productRouter = express.Router();
+
 
 productRouter.get(
   '/',
@@ -74,6 +76,32 @@ productRouter.get(
   })
 );
 
+productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
+  const menProducts = await Product.find({category:"men"}).limit(10);
+  if (menProducts) {
+      res.send(menProducts);
+  } else {
+      res.status(404).send({ message: 'Men Product Not Found' });
+  }
+}));
+
+productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
+  const womenProducts = await Product.find({category:"women"}).limit(10);
+  if (womenProducts) {
+      res.send(womenProducts);
+  } else {
+      res.status(404).send({ message: 'Women Product Not Found' });
+  }
+}));
+
+productRouter.get('/kidsList', expressAsyncHandler(async(req, res) => {
+  const kidProducts = await Product.find({category:"kids"}).limit(10);
+  if (kidProducts) {
+      res.send(kidProducts);
+  } else {
+      res.status(404).send({ message: 'Kids Product Not Found' });
+  }
+}));
 
 productRouter.get(
   '/categories',
@@ -134,6 +162,8 @@ productRouter.get(
   })
 );
 
+
+
 productRouter.post('/', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
     const product = new Product({
         name: req.body.name,
@@ -176,13 +206,13 @@ productRouter.put('/:id', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(
     }
 }));
 
-productRouter.delete(
-  '/:id',
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
+productRouter.delete('/:id',isAuth,isAdmin,expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
+      const image = await Image.findById(product.fileId);
+      if(image){
+        const deleteImage = await image.remove();
+      }
       const deleteProduct = await product.remove();
       res.send({ message: 'Product Deleted', product: deleteProduct });
     } else {

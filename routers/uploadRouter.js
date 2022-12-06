@@ -44,17 +44,17 @@ uploadRouter.get('/list', expressAsyncHandler(async(req, res) => {
     res.send(images);
 }));
 
-uploadRouter.delete('/:id', isAuth, expressAsyncHandler(async(req, res) => {
-    const productId = req.params.id;
-    const product = await Product.findById(productId);
-    const image = await Image.findById(product.fileId);
-    if (image) {
-        const deleteImage = await image.remove();
-        res.send({ message: 'Image Deleted', image: deleteImage });
-    } else {
-        res.status(404).send({ message: 'Image Not Found' });
-    }
-}));
+// uploadRouter.delete('/:id', isAuth, expressAsyncHandler(async(req, res) => {
+//     const productId = req.params.id;
+//     const product = await Product.findById(productId);
+//     const image = await Image.findById(product.fileId);
+//     if (image) {
+//         const deleteImage = await image.remove();
+//         res.send({ message: 'Image Deleted', image: deleteImage });
+//     } else {
+//         res.status(404).send({ message: 'Image Not Found' });
+//     }
+// }));
 
 uploadRouter.get('/show/:id', expressAsyncHandler(async(req, res) => {
 
