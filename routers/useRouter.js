@@ -121,8 +121,8 @@ userRouter.post(
             _id: registerUser._id,
             name: registerUser.name,
             email: registerUser.email,
-            isAdmin: registerUser.isAdmin,
-            isSeller: user.isSeller,
+            // isAdmin: registerUser.isAdmin,
+            isSeller: registerUser.isSeller,
             token: generateToken(registerUser),
         });
     })
