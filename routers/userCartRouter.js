@@ -35,7 +35,6 @@ UserCartRouter.put(
     console.log("req", req);
     const productId = req.params.id;
     const cartupdate = await UserCart.findById(productId);
-    console.log("cartupdate", cartupdate);
     if (cartupdate) {
       cartupdate.qty = req.body.qty;
       const updatedProduct = await cartupdate.save();
