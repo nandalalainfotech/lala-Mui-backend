@@ -13,6 +13,7 @@ import uploadRouter from './routers/uploadRouter.js';
 import http from 'http';
 import { Server } from 'socket.io';
 import bodyParser from "body-parser";
+import UserCartRouter from './routers/userCartRouter.js';
 
 
 dotenv.config();
@@ -34,7 +35,7 @@ app.use(cors());
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
-app.use('/api/womens', womenRouter);
+app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
 app.use('/api/sarees', sareeRouter);
 app.use('/api/orders', orderRouter);
