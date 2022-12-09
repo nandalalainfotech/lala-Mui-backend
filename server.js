@@ -19,7 +19,7 @@ import UserCartRouter from './routers/userCartRouter.js';
 dotenv.config();
 
 const app = express();
-
+mongoose.set('strictQuery', true);
 mongoose.connect('mongodb+srv://nandalala:Spartans!23@cluster0.ujwabrm.mongodb.net/laladb?retryWrites=true&w=majority', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
