@@ -12,6 +12,8 @@ const uploadRouter = express.Router();
 
 uploadRouter.post('/', isAuth, upload.single('image'), (async(req, res) => {
 
+    console.log("req", req.file);
+
     const image = new Image({
         fieldname: req.file.fieldname,
         originalname: req.file.originalname,

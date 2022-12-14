@@ -5,11 +5,11 @@ import mongoose from 'mongoose';
 import userRouter from './routers/useRouter.js';
 import productRouter from './routers/productRouter.js';
 import sareeRouter from './routers/sareeRouter.js';
-import womenRouter from './routers/womenRouter.js';
 import kidRouter from './routers/kidRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import path from 'path';
 import uploadRouter from './routers/uploadRouter.js';
+import applicationRouter from './routers/applicationRouter.js';
 import http from 'http';
 import { Server } from 'socket.io';
 import bodyParser from "body-parser";
@@ -34,6 +34,7 @@ app.use(cors());
 
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
+app.use('/api/application', applicationRouter);
 app.use('/api/products', productRouter);
 app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
