@@ -3,8 +3,13 @@ import expressAsyncHandler from 'express-async-handler';
 import data from '../data.js';
 import User from '../Models/userModel.js';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 import { generateToken, isAuth, isAdmin } from '../utils.js';
+import sgMail from '@sendgrid/mail';
+import otpGenerator from 'otp-generator';
 
+var SENDGRID_API_KEY = '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';
+sgMail.setApiKey(SENDGRID_API_KEY)
 const userRouter = express.Router();
 
 userRouter.get(
@@ -27,13 +32,15 @@ userRouter.get('/seed', expressAsyncHandler(async(req, res) => {
 userRouter.post(
     '/signin',
     expressAsyncHandler(async(req, res) => {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email ,status: "Otp-Verified"});
+        console.log("user", user);
         if (user) {
             if (bcrypt.compareSync(req.body.password, user.password)) {
                 res.send({
                     _id: user._id,
                     name: user.name,
                     email: user.email,
+                    status: user.status,
                     isAdmin: user.isAdmin,
                     isSeller: user.isSeller,
                     token: generateToken(user),
@@ -108,12 +115,41 @@ userRouter.post(
     })
 );
 
-userRouter.post(
-    '/register',
-    expressAsyncHandler(async(req, res) => {
-        const user = new User({
+userRouter.post('/register',expressAsyncHandler(async(req, res) => {
+        
+        console.log("req", req.body);
+
+        const {name, email} = req.body;
+
+        const otp = otpGenerator.generate(6, {
+            digits: true, lowerCaseAlphabets: false,upperCaseAlphabets : false,upperCase: false,specialChars: false,
+        });
+
+        const msg = {
+            to: email, // Change to your recipient
+            from: 'a.aravinth@nandalalainfotech.com', // Change to your verified sender
+            subject: name,
+            text: 'Welcome to Nanadalala Infotech',
+            html: `<p>Enter <b>${otp}</b> in our app to verify your email address</p>
+            <p>This code <b>expires in 1 hour</b></p>`,
+          }
+
+
+
+          sgMail
+            .send(msg)
+            .then(() => {
+              console.log("msg", msg);
+              console.log('Email sent')
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+            const user = new User({
             name: req.body.name,
             email: req.body.email,
+            otp: otp,
+            status: "otp-Notverified",
             password: bcrypt.hashSync(req.body.password, 8),
         });
         const registerUser = await user.save();
@@ -122,6 +158,8 @@ userRouter.post(
             name: registerUser.name,
             email: registerUser.email,
             isAdmin: registerUser.isAdmin,
+            otp: registerUser.otp,
+            status: registerUser.status,
             isSeller: user.isSeller,
             token: generateToken(registerUser),
         });
@@ -295,6 +333,20 @@ userRouter.put(
         } else {
             res.status(404).send({ message: 'User Not Found' });
         }
+    })
+);
+
+
+userRouter.put('/status/:id',isAuth,expressAsyncHandler(async(req, res) => {
+    const userId = req.params.id;
+    const statusUpdate = await User.findById(userId);
+    if (statusUpdate) {
+        statusUpdate.status = "Otp-Verified";
+        const updatedStatus = await statusUpdate.save();
+        res.send({ message: "Status Updated", statusUpdate: updatedStatus });
+      } else {
+        res.status(404).send({ message: "Product Not Found" });
+      }
     })
 );
 

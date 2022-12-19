@@ -14,6 +14,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import bodyParser from "body-parser";
 import UserCartRouter from './routers/userCartRouter.js';
+import otpRouter from './routers/otpRouter.js';
 
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(cors());
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/application', applicationRouter);
+app.use('/api/otp', otpRouter);
 app.use('/api/products', productRouter);
 app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
