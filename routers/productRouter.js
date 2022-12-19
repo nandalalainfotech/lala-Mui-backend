@@ -2,7 +2,7 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import data from '../data.js';
 import Product from '../Models/productModel.js';
-import { isAdmin, isAuth, isSellerOrAdmin } from '../utils.js';
+import { isAdmin, isAuth, isSeller, isSellerOrAdmin } from '../utils.js';
 import User from '../Models/userModel.js';
 import Image from '../Models/imagesModel.js';
 
@@ -77,7 +77,7 @@ productRouter.get(
 );
 
 productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
-  const menProducts = await Product.find({category:"men"}).limit(10);
+  const menProducts = await Product.find({category:"men"}).sort({createdAt: -1}).limit(10);
   if (menProducts) {
       res.send(menProducts);
   } else {
@@ -86,7 +86,7 @@ productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
 }));
 
 productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
-  const womenProducts = await Product.find({category:"women"}).limit(10);
+  const womenProducts = await Product.find({category:"women"}).sort({createdAt: -1}).limit(10);
   if (womenProducts) {
       res.send(womenProducts);
   } else {
@@ -150,6 +150,7 @@ productRouter.get(
   '/:id',
   expressAsyncHandler(async (req, res) => {
     // const product = await Product.findById(req.params.id);
+    
     const product = await Product.findById(req.params.id).populate(
       'seller',
       'seller.name seller.logo seller.rating seller.numReviews'
@@ -164,7 +165,7 @@ productRouter.get(
 
 
 
-productRouter.post('/', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
+productRouter.post('/', isAuth, isSeller, expressAsyncHandler(async(req, res) => {
     const product = new Product({
         name: req.body.name,
         seller: req.user._id,
@@ -185,7 +186,7 @@ productRouter.post('/', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(as
     res.send({ message: 'Product Created', product: createdProduct });
 }));
 
-productRouter.put('/:id', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
+productRouter.put('/:id',isAuth,isAdmin, isSeller, expressAsyncHandler(async(req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
     if (product) {
@@ -206,7 +207,7 @@ productRouter.put('/:id', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(
     }
 }));
 
-productRouter.delete('/:id',isAuth,isAdmin,expressAsyncHandler(async (req, res) => {
+productRouter.delete('/:id',isAuth,isAdmin,isSeller,expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
       const image = await Image.findById(product.fileId);
