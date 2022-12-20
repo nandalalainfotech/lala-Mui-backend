@@ -32,7 +32,7 @@ userRouter.get('/seed', expressAsyncHandler(async(req, res) => {
 userRouter.post(
     '/signin',
     expressAsyncHandler(async(req, res) => {
-        const user = await User.findOne({ email: req.body.email ,status: "Otp-Verified"});
+        const user = await User.findOne({ email: req.body.email});
         console.log("user", user);
         if (user) {
             if (bcrypt.compareSync(req.body.password, user.password)) {
