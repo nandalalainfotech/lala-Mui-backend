@@ -2,7 +2,7 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import data from '../data.js';
 import Product from '../Models/productModel.js';
-import { isAdmin, isAuth, isSellerOrAdmin } from '../utils.js';
+import { isAdmin, isAuth, isSeller, isSellerOrAdmin } from '../utils.js';
 import User from '../Models/userModel.js';
 import Image from '../Models/imagesModel.js';
 
@@ -19,6 +19,7 @@ productRouter.get(
     const category = req.query.category || '';
     const categorygroup = req.query.categorygroup || '';
     const categorytype = req.query.categorytype || '';
+    const categorytitel = req.query.categorytitel || '';
     const order = req.query.order || '';
     const min =
       req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
@@ -37,6 +38,7 @@ productRouter.get(
     const categoryFilter = category ? { category } : {};
     const categorygroupFilter = categorygroup ? { categorygroup } : {};
     const categorytypeFilter = categorytype ? { categorytype } : {};
+    const categorytitelFilter = categorytitel ? { categorytitel } : {};
     const priceFilter = min && max ? { price: { $gte: min, $lte: max } } : {};
     const ratingFilter = rating ? { rating: { $gte: rating } } : {};
     const sortOrder =
@@ -65,6 +67,7 @@ productRouter.get(
       ...categorytypeFilter,
       ...priceFilter,
       ...ratingFilter,
+      fileId: { $ne: null }
     })
       .populate('seller', 'seller.name seller.logo')
       //     .sort(sortOrder);
@@ -77,7 +80,7 @@ productRouter.get(
 );
 
 productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
-  const menProducts = await Product.find({category:"men"}).limit(10);
+  const menProducts = await Product.find({category:"men",fileId: { $ne: null }}).sort({createdAt: -1}).limit(10);
   if (menProducts) {
       res.send(menProducts);
   } else {
@@ -86,7 +89,7 @@ productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
 }));
 
 productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
-  const womenProducts = await Product.find({category:"women"}).limit(10);
+  const womenProducts = await Product.find({category:"women",fileId: { $ne: null }}).sort({createdAt: -1}).limit(10);
   if (womenProducts) {
       res.send(womenProducts);
   } else {
@@ -95,7 +98,7 @@ productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
 }));
 
 productRouter.get('/kidsList', expressAsyncHandler(async(req, res) => {
-  const kidProducts = await Product.find({category:"kids"}).limit(10);
+  const kidProducts = await Product.find({category:"kids",fileId: { $ne: null }}).limit(10);
   if (kidProducts) {
       res.send(kidProducts);
   } else {
@@ -150,6 +153,7 @@ productRouter.get(
   '/:id',
   expressAsyncHandler(async (req, res) => {
     // const product = await Product.findById(req.params.id);
+    
     const product = await Product.findById(req.params.id).populate(
       'seller',
       'seller.name seller.logo seller.rating seller.numReviews'
@@ -164,7 +168,7 @@ productRouter.get(
 
 
 
-productRouter.post('/', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
+productRouter.post('/', isAuth, isSeller, expressAsyncHandler(async(req, res) => {
     const product = new Product({
         name: req.body.name,
         seller: req.user._id,
@@ -185,7 +189,7 @@ productRouter.post('/', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(as
     res.send({ message: 'Product Created', product: createdProduct });
 }));
 
-productRouter.put('/:id', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
+productRouter.put('/:id',isAuth,isAdmin, isSeller, expressAsyncHandler(async(req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
     if (product) {
@@ -206,7 +210,7 @@ productRouter.put('/:id', isAuth, isAdmin, isSellerOrAdmin, expressAsyncHandler(
     }
 }));
 
-productRouter.delete('/:id',isAuth,isAdmin,expressAsyncHandler(async (req, res) => {
+productRouter.delete('/:id',isAuth,isAdmin,isSeller,expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
       const image = await Image.findById(product.fileId);

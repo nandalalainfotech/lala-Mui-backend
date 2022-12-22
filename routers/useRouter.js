@@ -3,8 +3,13 @@ import expressAsyncHandler from 'express-async-handler';
 import data from '../data.js';
 import User from '../Models/userModel.js';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 import { generateToken, isAuth, isAdmin } from '../utils.js';
+import sgMail from '@sendgrid/mail';
+import otpGenerator from 'otp-generator';
 
+// var SENDGRID_API_KEY = '';
+// sgMail.setApiKey(SENDGRID_API_KEY)
 const userRouter = express.Router();
 
 userRouter.get(
@@ -27,13 +32,14 @@ userRouter.get('/seed', expressAsyncHandler(async(req, res) => {
 userRouter.post(
     '/signin',
     expressAsyncHandler(async(req, res) => {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email});
         if (user) {
             if (bcrypt.compareSync(req.body.password, user.password)) {
                 res.send({
                     _id: user._id,
                     name: user.name,
                     email: user.email,
+                    status: user.status,
                     isAdmin: user.isAdmin,
                     isSeller: user.isSeller,
                     token: generateToken(user),
@@ -108,10 +114,10 @@ userRouter.post(
     })
 );
 
-userRouter.post(
-    '/register',
-    expressAsyncHandler(async(req, res) => {
-        const user = new User({
+userRouter.post('/register',expressAsyncHandler(async(req, res) => {
+        
+
+       const user = new User({
             name: req.body.name,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
@@ -295,6 +301,20 @@ userRouter.put(
         } else {
             res.status(404).send({ message: 'User Not Found' });
         }
+    })
+);
+
+
+userRouter.put('/status/:id',isAuth,expressAsyncHandler(async(req, res) => {
+    const userId = req.params.id;
+    const statusUpdate = await User.findById(userId);
+    if (statusUpdate) {
+        statusUpdate.status = "Otp-Verified";
+        const updatedStatus = await statusUpdate.save();
+        res.send({ message: "Status Updated", statusUpdate: updatedStatus });
+      } else {
+        res.status(404).send({ message: "Product Not Found" });
+      }
     })
 );
 

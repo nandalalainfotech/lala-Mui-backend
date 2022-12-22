@@ -5,20 +5,26 @@ import mongoose from 'mongoose';
 import userRouter from './routers/useRouter.js';
 import productRouter from './routers/productRouter.js';
 import sareeRouter from './routers/sareeRouter.js';
-import womenRouter from './routers/womenRouter.js';
 import kidRouter from './routers/kidRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import path from 'path';
 import uploadRouter from './routers/uploadRouter.js';
+import applicationRouter from './routers/applicationRouter.js';
 import http from 'http';
 import { Server } from 'socket.io';
 import bodyParser from "body-parser";
+import UserCartRouter from './routers/userCartRouter.js';
+import otpRouter from './routers/otpRouter.js';
+import categoryRouter from './routers/CategoryRouter.js';
+import categoryMainRouter from './routers/CategoryMainRouter.js';
+import categorysubRouter from './routers/CategorysubRouter.js';
+import categorychildRouter from './routers/CategorychildRouter.js';
 
 
 dotenv.config();
 
 const app = express();
-
+mongoose.set('strictQuery', true);
 mongoose.connect('mongodb+srv://nandalala:Spartans!23@cluster0.ujwabrm.mongodb.net/laladb?retryWrites=true&w=majority', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -33,8 +39,14 @@ app.use(cors());
 
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
+app.use('/api/application', applicationRouter);
+app.use('/api/category', categoryRouter);
+app.use('/api/categoryMain', categoryMainRouter);
+app.use('/api/subCategory', categorysubRouter);
+app.use('/api/childCategory', categorychildRouter);
+app.use('/api/otp', otpRouter);
 app.use('/api/products', productRouter);
-app.use('/api/womens', womenRouter);
+app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
 app.use('/api/sarees', sareeRouter);
 app.use('/api/orders', orderRouter);
