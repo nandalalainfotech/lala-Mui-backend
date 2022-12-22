@@ -65,6 +65,7 @@ productRouter.get(
       ...categorytypeFilter,
       ...priceFilter,
       ...ratingFilter,
+      fileId: { $ne: null }
     })
       .populate('seller', 'seller.name seller.logo')
       //     .sort(sortOrder);
