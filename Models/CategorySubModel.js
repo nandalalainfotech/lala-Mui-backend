@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const categoryrSchema = new mongoose.Schema(
   {
-    subcategoryname: { type: String, required: true, },
+    categoryId: { type: String, required: true, },
     subcategorygroup: { type: String, required: true },
     substatus: { type: String, required: true },
   },

@@ -19,7 +19,7 @@ productRouter.get(
     const category = req.query.category || '';
     const categorygroup = req.query.categorygroup || '';
     const categorytype = req.query.categorytype || '';
-    const categorytitel = req.query.categorytitel || '';
+    const categorytitle = req.query.categorytitle || '';
     const order = req.query.order || '';
     const min =
       req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
@@ -38,7 +38,7 @@ productRouter.get(
     const categoryFilter = category ? { category } : {};
     const categorygroupFilter = categorygroup ? { categorygroup } : {};
     const categorytypeFilter = categorytype ? { categorytype } : {};
-    const categorytitelFilter = categorytitel ? { categorytitel } : {};
+    const categorytitleFilter = categorytitle ? { categorytitle } : {};
     const priceFilter = min && max ? { price: { $gte: min, $lte: max } } : {};
     const ratingFilter = rating ? { rating: { $gte: rating } } : {};
     const sortOrder =
@@ -65,6 +65,7 @@ productRouter.get(
       ...categoryFilter,
       ...categorygroupFilter,
       ...categorytypeFilter,
+      ...categorytitle,
       ...priceFilter,
       ...ratingFilter,
       fileId: { $ne: null }
@@ -178,6 +179,7 @@ productRouter.post('/', isAuth, isSeller, expressAsyncHandler(async(req, res) =>
         category: req.body.category,
         categorygroup: req.body.categorygroup,
         categorytype: req.body.categorytype,
+        categorytitle: req.body.categorytitel,
         brand: req.body.brand,
         countInStock: req.body.countInStock,
         // rating: 0,
