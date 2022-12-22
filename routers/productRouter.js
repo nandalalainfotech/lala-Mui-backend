@@ -77,7 +77,7 @@ productRouter.get(
 );
 
 productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
-  const menProducts = await Product.find({category:"men"}).sort({createdAt: -1}).limit(10);
+  const menProducts = await Product.find({category:"men",fileId: { $ne: null }}).sort({createdAt: -1}).limit(10);
   if (menProducts) {
       res.send(menProducts);
   } else {
@@ -86,7 +86,7 @@ productRouter.get('/menList', expressAsyncHandler(async(req, res) => {
 }));
 
 productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
-  const womenProducts = await Product.find({category:"women"}).sort({createdAt: -1}).limit(10);
+  const womenProducts = await Product.find({category:"women",fileId: { $ne: null }}).sort({createdAt: -1}).limit(10);
   if (womenProducts) {
       res.send(womenProducts);
   } else {
@@ -95,7 +95,7 @@ productRouter.get('/womenList', expressAsyncHandler(async(req, res) => {
 }));
 
 productRouter.get('/kidsList', expressAsyncHandler(async(req, res) => {
-  const kidProducts = await Product.find({category:"kids"}).limit(10);
+  const kidProducts = await Product.find({category:"kids",fileId: { $ne: null }}).limit(10);
   if (kidProducts) {
       res.send(kidProducts);
   } else {
