@@ -16,6 +16,9 @@ import bodyParser from "body-parser";
 import UserCartRouter from './routers/userCartRouter.js';
 import otpRouter from './routers/otpRouter.js';
 import categoryRouter from './routers/CategoryRouter.js';
+import categoryMainRouter from './routers/CategoryMainRouter.js';
+import categorysubRouter from './routers/CategorysubRouter.js';
+import categorychildRouter from './routers/CategorychildRouter.js';
 
 
 dotenv.config();
@@ -38,6 +41,9 @@ app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/application', applicationRouter);
 app.use('/api/category', categoryRouter);
+app.use('/api/categoryMain', categoryMainRouter);
+app.use('/api/subCategory', categorysubRouter);
+app.use('/api/childCategory', categorychildRouter);
 app.use('/api/otp', otpRouter);
 app.use('/api/products', productRouter);
 app.use('/api/usercart', UserCartRouter);
