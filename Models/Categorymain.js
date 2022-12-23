@@ -4,8 +4,6 @@ const categoryrSchema = new mongoose.Schema(
   {
     categoryname: { type: String, required: true, },
     categorytittel: { type: String, required: true },
-    categorygroup: { type: String, required: true },
-    categorytype: { type: String, required: true },
     status: { type: String, required: true },
   },
   {
@@ -13,6 +11,6 @@ const categoryrSchema = new mongoose.Schema(
   }
 );
 
-const Category = mongoose.model("Category", categoryrSchema);
+const CategoryMain = mongoose.model("CategoryMain", categoryrSchema);
 
-export default Category;
+export default CategoryMain;

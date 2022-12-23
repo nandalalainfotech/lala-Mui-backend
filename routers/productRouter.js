@@ -19,6 +19,7 @@ productRouter.get(
     const category = req.query.category || '';
     const categorygroup = req.query.categorygroup || '';
     const categorytype = req.query.categorytype || '';
+    const categorytitel = req.query.categorytitel || '';
     const order = req.query.order || '';
     const min =
       req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
@@ -37,6 +38,7 @@ productRouter.get(
     const categoryFilter = category ? { category } : {};
     const categorygroupFilter = categorygroup ? { categorygroup } : {};
     const categorytypeFilter = categorytype ? { categorytype } : {};
+    const categorytitelFilter = categorytitel ? { categorytitel } : {};
     const priceFilter = min && max ? { price: { $gte: min, $lte: max } } : {};
     const ratingFilter = rating ? { rating: { $gte: rating } } : {};
     const sortOrder =

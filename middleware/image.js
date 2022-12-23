@@ -8,7 +8,6 @@ const storage = new GridFsStorage({
     url: 'mongodb+srv://nandalala:Spartans!23@cluster0.ujwabrm.mongodb.net/laladb?retryWrites=true&w=majority',
 
     file: (req, file) => {
-        console.log("file", file);
         return new Promise((resolve, reject) => {
             crypto.randomBytes(16, (err, buf) => {
                 if (err) {
