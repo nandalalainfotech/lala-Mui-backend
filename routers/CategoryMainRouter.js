@@ -23,7 +23,6 @@ categoryMainRouter.post('/', isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAs
          status: req.body.categorystatus,
      });
      const createdCategory = await category.save();
-     console.log("createdCategory==========>>",createdCategory);
      res.send({ message: 'Product Created', category: createdCategory });
  }));
  

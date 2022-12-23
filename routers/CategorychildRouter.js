@@ -8,8 +8,6 @@ const categorychildRouter = express.Router();
 categorychildRouter.get("/categorysub",expressAsyncHandler(async (req, res) => {
    
     const Categorylist = await Categorychild.find();
-    console.log("Categorylist",Categorylist);
-
     if (Categorylist) {
         res.send(Categorylist);
     } else {
@@ -21,12 +19,12 @@ categorychildRouter.get("/categorysub",expressAsyncHandler(async (req, res) => {
 
   categorychildRouter.post('/', isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
     const category = new Categorychild({
+        categorychildId: req.body.categorychildId,
         childcategorygroup: req.body.categorygorup,
         childcategorytype: req.body.categorytype,
         childstatus: req.body.subchildcategorystatus,
      });
      const createdCategory = await category.save();
-     console.log("createdCategory===========>>>",createdCategory);
      res.send({ message: 'Product Created', category: createdCategory });
  }));
  

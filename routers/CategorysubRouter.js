@@ -8,7 +8,6 @@ const categorysubRouter = express.Router();
 categorysubRouter.get("/categorysub",expressAsyncHandler(async (req, res) => {
    
     const Categorylist = await Categorysub.find();
-    console.log("Categorylist",Categorylist);
 
     if (Categorylist) {
         res.send(Categorylist);
@@ -21,7 +20,7 @@ categorysubRouter.get("/categorysub",expressAsyncHandler(async (req, res) => {
 
 categorysubRouter.post('/', isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
     const category = new Categorysub({
-        subcategoryname: req.body.categoryname,
+        categoryId: req.body.categoryId,
          subcategorygroup: req.body.categorygroup,
          substatus: req.body.subcategorystatus,
      });
