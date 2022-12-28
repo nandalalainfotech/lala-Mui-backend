@@ -19,6 +19,8 @@ import categoryRouter from './routers/CategoryRouter.js';
 import categoryMainRouter from './routers/CategoryMainRouter.js';
 import categorysubRouter from './routers/CategorysubRouter.js';
 import categorychildRouter from './routers/CategorychildRouter.js';
+import brandRouter from './routers/brandRouter.js';
+import brandAddressRouter from './routers/brandAddressRouter.js';
 
 
 dotenv.config();
@@ -40,6 +42,8 @@ app.use(cors());
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/application', applicationRouter);
+app.use('/api/brand', brandRouter);
+app.use('/api/brandaddress', brandAddressRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/categoryMain', categoryMainRouter);
 app.use('/api/subCategory', categorysubRouter);
