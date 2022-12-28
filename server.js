@@ -19,6 +19,10 @@ import categoryRouter from './routers/CategoryRouter.js';
 import categoryMainRouter from './routers/CategoryMainRouter.js';
 import categorysubRouter from './routers/CategorysubRouter.js';
 import categorychildRouter from './routers/CategorychildRouter.js';
+import AttributeRouter from './routers/AttributeRouter.js';
+import AttributeValueRouter from './routers/AttributeValueRouter.js';
+import FeaturesRouter from './routers/FeaturesRouter.js';
+import FeaturesValueRouter from './routers/FeaturesValueRouter.js';
 
 
 dotenv.config();
@@ -41,7 +45,11 @@ app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/application', applicationRouter);
 app.use('/api/category', categoryRouter);
+app.use('/api/Features', FeaturesRouter);
+app.use('/api/FeaturesValue', FeaturesValueRouter);
 app.use('/api/categoryMain', categoryMainRouter);
+app.use('/api/Attribute', AttributeRouter);
+app.use('/api/AttributeValue', AttributeValueRouter);
 app.use('/api/subCategory', categorysubRouter);
 app.use('/api/childCategory', categorychildRouter);
 app.use('/api/otp', otpRouter);
