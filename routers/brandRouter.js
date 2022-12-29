@@ -93,4 +93,16 @@ brandRouter.put('/:id', isAuth, upload.single('image'), (async(req, res) => {
   })
 );
 
+brandRouter.delete("/:id",expressAsyncHandler(async (req, res) => {
+
+    const deleteBrand = await Brand.findById(req.params.id);
+    if (deleteBrand) {
+      const brandDeleted = await deleteBrand.remove();
+      res.send({ message: "Brand Deleted", deleteBrand: brandDeleted });
+    } else {
+      res.status(404).send({ message: "Brand Not Found" });
+    }
+  })
+);
+
 export default brandRouter;
