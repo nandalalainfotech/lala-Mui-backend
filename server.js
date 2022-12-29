@@ -27,6 +27,7 @@ import AttributeRouter from './routers/AttributeRouter.js';
 import AttributeValueRouter from './routers/AttributeValueRouter.js';
 import FeaturesRouter from './routers/FeaturesRouter.js';
 import FeaturesValueRouter from './routers/FeaturesValueRouter.js';
+import categoryMasterRouter from './routers/categoryMasterRouter.js';
 
 
 
@@ -65,6 +66,7 @@ app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
 app.use('/api/sarees', sareeRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/categorymaster', categoryMasterRouter);
 app.get('/api/config/paypal', (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
