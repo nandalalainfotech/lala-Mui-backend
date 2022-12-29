@@ -50,7 +50,6 @@ AttributeRouter.delete("/:id",expressAsyncHandler(async (req, res) => {
     const deleteAttribute = await Attribute.findById(req.params.id);
     if (deleteAttribute) {
       const deleteattributed = await deleteAttribute.remove();
-      console.log("deleteattributed",deleteattributed);
       res.send({ message: "Attributed Deleted", deleteAtt: deleteattributed });
     } else {
       res.status(404).send({ message: "Product Not Found" });
