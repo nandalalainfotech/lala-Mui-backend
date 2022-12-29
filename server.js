@@ -50,14 +50,8 @@ app.use(cors());
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
 app.use('/api/application', applicationRouter);
-app.use('/api/brand', brandRouter);
-app.use('/api/brandaddress', brandAddressRouter);
 app.use('/api/category', categoryRouter);
-app.use('/api/Features', FeaturesRouter);
-app.use('/api/FeaturesValue', FeaturesValueRouter);
 app.use('/api/categoryMain', categoryMainRouter);
-app.use('/api/Attribute', AttributeRouter);
-app.use('/api/AttributeValue', AttributeValueRouter);
 app.use('/api/subCategory', categorysubRouter);
 app.use('/api/childCategory', categorychildRouter);
 app.use('/api/otp', otpRouter);
@@ -66,7 +60,14 @@ app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
 app.use('/api/sarees', sareeRouter);
 app.use('/api/orders', orderRouter);
+// **********************Admin panel*******************
 app.use('/api/categorymaster', categoryMasterRouter);
+app.use('/api/brand', brandRouter);
+app.use('/api/brandaddress', brandAddressRouter);
+app.use('/api/Attribute', AttributeRouter);
+app.use('/api/AttributeValue', AttributeValueRouter);
+app.use('/api/Features', FeaturesRouter);
+app.use('/api/FeaturesValue', FeaturesValueRouter);
 app.get('/api/config/paypal', (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
