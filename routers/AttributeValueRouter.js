@@ -8,7 +8,6 @@ const AttributeValueRouter = express.Router();
 
 AttributeValueRouter.get("/Attributevalue",expressAsyncHandler(async (req, res) => {
     const Attributelist = await AttributeValue.find();
-    console.log("Attributelist",Attributelist);
     if (Attributelist) {
         res.send(Attributelist);
     } else {
@@ -34,7 +33,6 @@ AttributeValueRouter.post(
       color: req.body.color,
     });
     const AttriValueUploaded = await AttriValue.save();
-    console.log("req====>>", AttriValueUploaded);
     res.send({ message: "image Uploaded", image: AttriValueUploaded });
   }
 );
