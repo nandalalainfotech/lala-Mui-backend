@@ -26,7 +26,6 @@ categoryMasterRouter.post('/', isAuth, upload.single('coverimg'), (async (req, r
 
 categoryMasterRouter.get('/categorymasterList', expressAsyncHandler(async (req, res) => {
     const categorymaster = await CategoryMaster.find();
-    console.log("categorymaster======>>>>>>>>>", categorymaster)
     if (categorymaster) {
         res.send(categorymaster);
     } else {
@@ -35,7 +34,6 @@ categoryMasterRouter.get('/categorymasterList', expressAsyncHandler(async (req, 
 }));
 
 categoryMasterRouter.delete('/:id', isAuth, isAdmin, isSeller, expressAsyncHandler(async (req, res) => {
-    console.log("id--Action", req.params);
     const categoryobj = await CategoryMaster.findById(req.params.id);
     if (categoryobj) {
         const deletecategory = await categoryobj.remove();
