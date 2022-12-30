@@ -82,6 +82,7 @@ brandRouter.put('/:id', isAuth, upload.single('image'), (async(req, res) => {
       brandUpdate.attributename = req.body.name;
       brandUpdate.attributetype = req.body.editor
       brandUpdate.ckeditor = req.body.ckeditor
+      brandUpdate.checked = req.body.checked
       brandUpdate.fieldname = req.file.fieldname
       brandUpdate.originalname = req.file.originalname
       brandUpdate.filename = req.file.filename
