@@ -3,6 +3,7 @@ const brandSchema = new mongoose.Schema(
   
     {
       name: { type: String, required: true },
+      checked: { type: Boolean, required: true },
       editor: { type: String, required: true },
       ckeditor: { type: String, required: true },
       fieldname: { type: String, required: true },
