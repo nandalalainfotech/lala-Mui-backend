@@ -18,6 +18,7 @@ brandRouter.post('/', isAuth, upload.single('image'), (async(req, res) => {
         mimetype: req.file.mimetype,
         filename: req.file.filename,
         name: req.body.name,
+        checked: req.body.checked,
         editor: req.body.editor,
         ckeditor: req.body.ckeditor,
     });
