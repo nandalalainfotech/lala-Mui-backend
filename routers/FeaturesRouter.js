@@ -17,6 +17,19 @@ FeaturesRouter.get("/Flist",expressAsyncHandler(async (req, res) => {
   );
 
 
+  FeaturesRouter.put("/:id", isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
+    const FeaturesId = req.params.id;
+    const Featuresupdate = await Features.findById(FeaturesId);
+    if (Featuresupdate) {
+      Featuresupdate.featurename = req.body.featurename;
+      const updatedFeatures = await Featuresupdate.save();
+      res.send({ message: " Updated", Features: updatedFeatures });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
 FeaturesRouter.post(
   "/",
   isAuth,
@@ -30,6 +43,17 @@ FeaturesRouter.post(
     const featureCategory = await feature.save();
     res.send({ message: "Product Created", feature: featureCategory });
   })
+);
+
+FeaturesRouter.delete("/:id",expressAsyncHandler(async (req, res) => {
+  const deleteAttribute = await Features.findById(req.params.id);
+  if (deleteAttribute) {
+    const deleteattributed = await deleteAttribute.remove();
+    res.send({ message: "Attributed Deleted", deleteAtt: deleteattributed });
+  } else {
+    res.status(404).send({ message: "Product Not Found" });
+  }
+})
 );
 
 export default FeaturesRouter;
