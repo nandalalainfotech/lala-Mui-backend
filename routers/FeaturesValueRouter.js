@@ -16,6 +16,19 @@ FeaturesValueRouter.get("/Fvaluelist",expressAsyncHandler(async (req, res) => {
     })
   );
 
+  FeaturesValueRouter.put("/:id", isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
+    const FeaturesId = req.params.id;
+    const Featuresupdate = await FeaturesValue.findById(FeaturesId);
+    if (Featuresupdate) {
+      Featuresupdate.featurevalue= req.body.featurevalue;
+      Featuresupdate.featuretype= req.body.featuretype;
+      const updatedFeatures = await Featuresupdate.save();
+      res.send({ message: " Updated", Features: updatedFeatures });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
 FeaturesValueRouter.post(
     "/",
     isAuth,
@@ -31,5 +44,16 @@ FeaturesValueRouter.post(
       res.send({ message: "Product Created", feature: featureCategory });
     })
   );
-  
+
+  FeaturesValueRouter.delete("/:id",expressAsyncHandler(async (req, res) => {
+    const deleteAttribute = await FeaturesValue.findById(req.params.id);
+    if (deleteAttribute) {
+      const deleteattributed = await deleteAttribute.remove();
+      res.send({ message: "Attributed Deleted", deleteAtt: deleteattributed });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+  );
+
   export default FeaturesValueRouter;
