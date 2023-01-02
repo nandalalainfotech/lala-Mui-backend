@@ -28,6 +28,7 @@ import AttributeValueRouter from './routers/AttributeValueRouter.js';
 import FeaturesRouter from './routers/FeaturesRouter.js';
 import FeaturesValueRouter from './routers/FeaturesValueRouter.js';
 import categoryMasterRouter from './routers/categoryMasterRouter.js';
+import catProductRouter from './routers/catProductRouter.js';
 
 
 
@@ -64,6 +65,7 @@ app.use('/api/orders', orderRouter);
 app.use('/api/categorymaster', categoryMasterRouter);
 app.use('/api/brand', brandRouter);
 app.use('/api/brandaddress', brandAddressRouter);
+app.use('/api/catProduct', catProductRouter);
 app.use('/api/Attribute', AttributeRouter);
 app.use('/api/AttributeValue', AttributeValueRouter);
 app.use('/api/Features', FeaturesRouter);
