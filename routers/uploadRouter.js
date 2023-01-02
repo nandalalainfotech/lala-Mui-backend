@@ -7,6 +7,7 @@ import Image from "../Models/imagesModel.js";
 import Grid from "gridfs-stream";
 import mongoose from "mongoose";
 import Product from "../Models/productModel.js";
+import CatlogProduct from "../Models/catProductModule.js";
 
 const uploadRouter = express.Router();
 
@@ -17,6 +18,35 @@ uploadRouter.get(
     const id = req.params.fileId;
     const product = await Product.findById({ _id: id });
     const images = await Image.find({ _id: product.fileId });
+
+    var filename = images[0].filename;
+    // console.log("req======>>>", filename);
+    const conn = mongoose.connection;
+    var gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection("uploads");
+    gfs.files.find({ filename: filename }).toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.status(404).json({
+          err: "no files exist",
+        });
+      }
+      var bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+        bucketName: "uploads",
+      });
+      var readstream = bucket.openDownloadStreamByName(filename);
+      return readstream.pipe(res);
+    });
+  })
+);
+
+uploadRouter.get(
+  "/showCatProd/:imageId",
+  expressAsyncHandler(async (req, res) => {
+    
+
+    const id = req.params.imageId;
+    const product = await CatlogProduct.findById({ _id: id });
+    const images = await Image.find({ _id: product.imageId });
 
     var filename = images[0].filename;
     // console.log("req======>>>", filename);

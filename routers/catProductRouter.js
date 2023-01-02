@@ -1,14 +1,13 @@
 import express from 'express';
-import upload from "../middleware/image.js";
 import CatlogProduct from '../Models/catProductModule.js';
 import { isAuth } from "../utils.js";
+import expressAsyncHandler from 'express-async-handler';
+
 
 const catProductRouter = express.Router();
 
-catProductRouter.post('/', isAuth, async (req, res) => {
 
-    
-console.log("req", req.body);
+catProductRouter.post('/', isAuth, async (req, res) => {
     const brand = new CatlogProduct({
         prodname: req.body.prodname,
         user: req.user._id,
@@ -34,9 +33,20 @@ console.log("req", req.body);
         weight: req.body.weight,
     });
     const brandSaved = await brand.save();
-    console.log("req===========>>>", brandSaved);
     res.send({ message: 'Product Created', product: brandSaved });
 
 });
+
+catProductRouter.get('/allcatProduct', expressAsyncHandler(async(req, res) => {
+
+    
+
+    const catProd = await CatlogProduct.find();
+    if (catProd) {
+        res.send(catProd);
+    } else {
+        res.status(404).send({ message: 'Catalog Product Not Found' });
+    }
+}));
 
 export default catProductRouter;
