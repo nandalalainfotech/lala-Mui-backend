@@ -65,6 +65,7 @@ uploadRouter.post(
   isAuth,
   upload.fields([{ name: "images" }, { name: "image" }]),
   async (req, res) => {
+   
     let subImage = [];
     for (let i = 0; i < req.files.images.length; i++) {
       const image = new Image({
@@ -77,6 +78,7 @@ uploadRouter.post(
       });
       subImage.push(image);
     }
+   
     const primaryImage = new Image({
       fieldname: req.files.image[0].fieldname,
       originalname: req.files.image[0].originalname,
