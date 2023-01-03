@@ -14,7 +14,7 @@ catProductRouter.post('/', isAuth, async (req, res) => {
         imageId: req.body. fileId,
         summary: req.body.summary.data,
         description: req.body.description.data,
-        feature: req.body.feature,
+        featureId: req.body.featureId,
         brand: req.body.brand,
         search: req.body.search,
         reference: req.body.reference,
