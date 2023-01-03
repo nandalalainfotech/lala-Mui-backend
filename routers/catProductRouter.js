@@ -1,8 +1,7 @@
 import express from 'express';
-import CatlogProduct from '../Models/catProductModule.js';
-import { isAuth } from "../utils.js";
 import expressAsyncHandler from 'express-async-handler';
-
+import CatlogProduct from '../Models/catProductModule.js';
+import { isAdmin, isAuth, isSeller, isSellerOrAdmin } from "../utils.js";
 
 const catProductRouter = express.Router();
 
@@ -15,6 +14,8 @@ catProductRouter.post('/', isAuth, async (req, res) => {
         summary: req.body.summary.data,
         description: req.body.description.data,
         featureId: req.body.featureId,
+        featurestypevalue: req.body.featurestypevalue,
+        combination: req.body.combination,
         brand: req.body.brand,
         search: req.body.search,
         reference: req.body.reference,
@@ -39,8 +40,6 @@ catProductRouter.post('/', isAuth, async (req, res) => {
 
 catProductRouter.get('/allcatProduct', expressAsyncHandler(async(req, res) => {
 
-    
-
     const catProd = await CatlogProduct.find();
     if (catProd) {
         res.send(catProd);
@@ -48,5 +47,43 @@ catProductRouter.get('/allcatProduct', expressAsyncHandler(async(req, res) => {
         res.status(404).send({ message: 'Catalog Product Not Found' });
     }
 }));
+
+catProductRouter.put('/:id', isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncHandler(async(req, res) => {
+
+    const catProdId = req.params.id;
+    const catProdUpdate = await CatlogProduct.findById(catProdId);
+    if (catProdUpdate) {
+        catProdUpdate.prodname = req.body.prodname;
+        catProdUpdate.summary = req.body.summary;
+        catProdUpdate.description = req.body.description;
+        catProdUpdate.featureId =req.body.featureId;
+        catProdUpdate.featurestypevalue = req.body.featurestypevalue;
+        catProdUpdate.brand = req.body.brand;
+        catProdUpdate.combination = req.body.combination;
+        catProdUpdate.reference = req.body.reference;
+        catProdUpdate.quantity = req.body.quantity;
+        catProdUpdate.taxexcluded = req.body.taxexcluded;
+        catProdUpdate.taxincluded = req.body.taxincluded;
+
+      const updatedCatProd = await catProdUpdate.save();
+      res.send({ message: "Catalog Product Updated", catProdUpdate: updatedCatProd });
+    } else {
+      res.status(404).send({ message: "Catalog Product Not Found" });
+    }
+  })
+); 
+
+
+catProductRouter.delete("/:id",expressAsyncHandler(async (req, res) => {
+
+    const deleteCatProd = await CatlogProduct.findById(req.params.id);
+    if (deleteCatProd) {
+      const catProductDeleted = await deleteCatProd.remove();
+      res.send({ message: "Catalog Product Deleted", deleteCatProd: catProductDeleted });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
 
 export default catProductRouter;
