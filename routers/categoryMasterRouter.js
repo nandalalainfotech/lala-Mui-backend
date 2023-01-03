@@ -8,23 +8,50 @@ import Grid from 'gridfs-stream';
 import mongoose from 'mongoose';
 
 categoryMasterRouter.post('/', isAuth, upload.single('coverimg'), (async (req, res) => {
-    const categoryMaster = new CategoryMaster({
-        name: req.body.name,
-        checked: req.body.checked,
-        parent: req.body.parent,
-        description: req.body.description,
-        coverimg: req.file.filename,
-
-        // fieldname: req.file.fieldname,
-        // originalname: req.file.originalname,
-        // path: req.file.path,
-        // filename: req.file.filename,
-        // mimetype: req.file.mimetype,
-        // filename: req.file.filename,
-    });
-    const CategoryMasteruploaded = await categoryMaster.save();
-    res.send({ message: 'image Uploaded', image: CategoryMasteruploaded });
-}));
+    console.log("req", req);
+    let categoryParent;
+    if(req.body.parent!='home'){
+        categoryParent = await CategoryMaster.findById(req.body.parent);
+    }
+     console.log("categoryParent", categoryParent);
+     if(categoryParent){
+        console.log("categoryParent test1", true);
+        const subcategory={
+           name: req.body.name,
+            checked: req.body.checked,
+            parent: req.body.parent,
+            description: req.body.description,
+            coverimg: req.file.filename,
+        };
+        categoryParent.children.push(subcategory);
+        const updatedCategory = await categoryParent.save();
+        res.status(201).send({
+          message: 'Category Added',
+          categories:updatedCategory,
+        });
+     }else{
+        console.log("categoryParent test2", false);
+        const categories = new CategoryMaster({
+            name: req.body.name,
+            checked: req.body.checked,
+            parent: req.body.parent,
+            description: req.body.description,
+            coverimg: req.file.filename,
+        });
+        const CategoryMasteruploaded = await categories.save();
+        res.send({ message: 'Category created', categories: CategoryMasteruploaded });
+    }}));
+    // const categoryMaster = new CategoryMaster({
+    //     name: req.body.name,
+    //     checked: req.body.checked,
+    //     parent: req.body.parent,
+    //     description: req.body.description,
+    //     coverimg: req.file.filename,
+    // });
+    // const CategoryMasteruploaded = await categoryMaster.save();
+    // res.send({ message: 'image Uploaded', categorymasters: CategoryMasteruploaded });
+  
+// }));
 
 categoryMasterRouter.get('/categorymasterList', expressAsyncHandler(async (req, res) => {
     const categorymaster = await CategoryMaster.find();
