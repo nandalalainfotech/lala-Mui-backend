@@ -20,6 +20,17 @@ import categoryMainRouter from './routers/CategoryMainRouter.js';
 import categorysubRouter from './routers/CategorysubRouter.js';
 import categorychildRouter from './routers/CategorychildRouter.js';
 
+import brandRouter from './routers/brandRouter.js';
+import brandAddressRouter from './routers/brandAddressRouter.js';
+
+import AttributeRouter from './routers/AttributeRouter.js';
+import AttributeValueRouter from './routers/AttributeValueRouter.js';
+import FeaturesRouter from './routers/FeaturesRouter.js';
+import FeaturesValueRouter from './routers/FeaturesValueRouter.js';
+import categoryMasterRouter from './routers/categoryMasterRouter.js';
+import catProductRouter from './routers/catProductRouter.js';
+
+
 
 dotenv.config();
 
@@ -50,6 +61,15 @@ app.use('/api/usercart', UserCartRouter);
 app.use('/api/kids', kidRouter)
 app.use('/api/sarees', sareeRouter);
 app.use('/api/orders', orderRouter);
+// **********************Admin panel*******************
+app.use('/api/categorymaster', categoryMasterRouter);
+app.use('/api/brand', brandRouter);
+app.use('/api/brandaddress', brandAddressRouter);
+app.use('/api/catProduct', catProductRouter);
+app.use('/api/Attribute', AttributeRouter);
+app.use('/api/AttributeValue', AttributeValueRouter);
+app.use('/api/Features', FeaturesRouter);
+app.use('/api/FeaturesValue', FeaturesValueRouter);
 app.get('/api/config/paypal', (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });

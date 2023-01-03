@@ -25,7 +25,6 @@ categoryRouter.post('/', isAuth, isSeller,isAdmin,isSellerOrAdmin, expressAsyncH
         status: req.body.categorystatus,
     });
     const createdCategory = await category.save();
-    console.log("createdCategory==========>>",createdCategory);
     res.send({ message: 'Product Created', category: createdCategory });
 }));
 

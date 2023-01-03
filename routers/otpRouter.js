@@ -16,7 +16,6 @@ const otpRouter = express.Router();
 otpRouter.post(
   "/",
   expressAsyncHandler(async (req, res) => {
-    console.log("req", req.body.email);
     
     const { email } = req.body;
 
