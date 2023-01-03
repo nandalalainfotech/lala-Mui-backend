@@ -168,8 +168,8 @@ uploadRouter.get(
   "/show/:id",
   expressAsyncHandler(async (req, res) => {
     const id = req.params.id;
-    const product = await Product.findById({ _id: id });
-    const images = await Image.find({ _id: product.fileId });
+    const product = await CatlogProduct.findById({ _id: id });
+    const images = await Image.find({ _id:  product.imageId });
     var filename = images[0].filename;
     const conn = mongoose.connection;
     var gfs = Grid(conn.db, mongoose.mongo);
