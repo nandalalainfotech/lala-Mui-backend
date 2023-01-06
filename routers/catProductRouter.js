@@ -121,4 +121,17 @@ catProductRouter.delete(
   })
 );
 
+catProductRouter.get('/:id',expressAsyncHandler(async (req, res) => {
+
+    
+  const product = await CatlogProduct.findById(req.params.id).populate(
+  );
+  if (product) {
+    res.send(product);
+  } else {
+    res.status(404).send({ message: 'Product Not Found' });
+  }
+})
+);
+
 export default catProductRouter;
